@@ -1,6 +1,29 @@
 -- Adminer 4.6.3 PostgreSQL dump
-
 CREATE SEQUENCE cards_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+CREATE SEQUENCE failed_jobs_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+CREATE SEQUENCE jobs_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+CREATE SEQUENCE migrations_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+CREATE SEQUENCE plan_subscriptions_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+CREATE SEQUENCE plans_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+CREATE SEQUENCE settings_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+CREATE SEQUENCE users_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+
+CREATE TABLE "public"."users" (
+    "id" integer DEFAULT nextval('users_id_seq') NOT NULL,
+    "name" character varying(191) NOT NULL,
+    "email" character varying(191) NOT NULL,
+    "password" character varying(191),
+    "braintree_customer_id" character varying(191),
+    "facebook_id" character varying(191),
+    "google_id" character varying(191),
+    "twitter_id" character varying(191),
+    "remember_token" character varying(100),
+    "created_at" timestamp(0),
+    "updated_at" timestamp(0),
+    "activated" boolean DEFAULT false NOT NULL,
+    CONSTRAINT "users_email_unique" UNIQUE ("email"),
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
 
 CREATE TABLE "public"."cards" (
     "id" integer DEFAULT nextval('cards_id_seq') NOT NULL,
@@ -12,9 +35,6 @@ CREATE TABLE "public"."cards" (
     CONSTRAINT "cards_user_id_foreign" FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT DEFERRABLE
 ) WITH (oids = false);
 
-
-CREATE SEQUENCE failed_jobs_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
-
 CREATE TABLE "public"."failed_jobs" (
     "id" bigint DEFAULT nextval('failed_jobs_id_seq') NOT NULL,
     "connection" text NOT NULL,
@@ -24,9 +44,6 @@ CREATE TABLE "public"."failed_jobs" (
     "failed_at" timestamp(0) DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT "failed_jobs_pkey" PRIMARY KEY ("id")
 ) WITH (oids = false);
-
-
-CREATE SEQUENCE jobs_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 
 CREATE TABLE "public"."jobs" (
     "id" bigint DEFAULT nextval('jobs_id_seq') NOT NULL,
@@ -40,9 +57,6 @@ CREATE TABLE "public"."jobs" (
 ) WITH (oids = false);
 
 CREATE INDEX "jobs_queue_index" ON "public"."jobs" USING btree ("queue");
-
-
-CREATE SEQUENCE migrations_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
 
 CREATE TABLE "public"."migrations" (
     "id" integer DEFAULT nextval('migrations_id_seq') NOT NULL,
@@ -71,9 +85,6 @@ CREATE TABLE "public"."password_resets" (
 
 CREATE INDEX "password_resets_email_index" ON "public"."password_resets" USING btree ("email");
 
-
-CREATE SEQUENCE plan_subscriptions_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
-
 CREATE TABLE "public"."plan_subscriptions" (
     "id" integer DEFAULT nextval('plan_subscriptions_id_seq') NOT NULL,
     "user_id" integer NOT NULL,
@@ -88,9 +99,6 @@ CREATE TABLE "public"."plan_subscriptions" (
     CONSTRAINT "plan_subscriptions_pkey" PRIMARY KEY ("id"),
     CONSTRAINT "plan_subscriptions_user_id_foreign" FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT DEFERRABLE
 ) WITH (oids = false);
-
-
-CREATE SEQUENCE plans_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
 
 CREATE TABLE "public"."plans" (
     "id" integer DEFAULT nextval('plans_id_seq') NOT NULL,
@@ -109,8 +117,6 @@ INSERT INTO "plans" ("id", "name", "slug", "braintree_plan", "cost", "descriptio
 (1,	'Premium Monthly Plan',	'premium-monthly-plan',	'premium-monthly',	9.99,	'Allows access to monthly premium videos adding several features to the basic CodeTube experience.',	'2019-03-29 14:05:23',	'2019-03-29 14:05:23'),
 (2,	'Premium Yearly Plan',	'premium-yearly-plan',	'premium-yearly',	69.99,	'Allows yearly access to premium features including prominent services like CodeTube ad-free.',	'2019-03-29 14:05:23',	'2019-03-29 14:05:23');
 
-CREATE SEQUENCE settings_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
-
 CREATE TABLE "public"."settings" (
     "id" integer DEFAULT nextval('settings_id_seq') NOT NULL,
     "user_id" integer NOT NULL,
@@ -125,7 +131,6 @@ CREATE TABLE "public"."settings" (
     CONSTRAINT "settings_user_id_foreign" FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT DEFERRABLE
 ) WITH (oids = false);
 
-
 CREATE TABLE "public"."user_activations" (
     "user_id" integer NOT NULL,
     "token" character varying(191) NOT NULL,
@@ -133,26 +138,5 @@ CREATE TABLE "public"."user_activations" (
 ) WITH (oids = false);
 
 CREATE INDEX "user_activations_token_index" ON "public"."user_activations" USING btree ("token");
-
-
-CREATE SEQUENCE users_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
-
-CREATE TABLE "public"."users" (
-    "id" integer DEFAULT nextval('users_id_seq') NOT NULL,
-    "name" character varying(191) NOT NULL,
-    "email" character varying(191) NOT NULL,
-    "password" character varying(191),
-    "braintree_customer_id" character varying(191),
-    "facebook_id" character varying(191),
-    "google_id" character varying(191),
-    "twitter_id" character varying(191),
-    "remember_token" character varying(100),
-    "created_at" timestamp(0),
-    "updated_at" timestamp(0),
-    "activated" boolean DEFAULT false NOT NULL,
-    CONSTRAINT "users_email_unique" UNIQUE ("email"),
-    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
-) WITH (oids = false);
-
 
 -- 2019-04-08 01:13:36.145023+01
