@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Services\ActivationService;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use LangleyFoxall\LaravelNISTPasswordRules\PasswordRules;
 
 class LoginController extends Controller
 {
@@ -33,8 +32,8 @@ class LoginController extends Controller
 
   protected function validateLogin(Request $request) {
     $this->validate($request, [
-      $this->username() => 'required|string',
-      'password' => PasswordRules::login()
+      'email' => 'required|string',
+      'password' => 'required|string'
     ]);
   }
 
@@ -59,11 +58,6 @@ class LoginController extends Controller
       return redirect('/');
     }
 
-    // TODO handle this :(
-    /*if (User::where('email', $social_user->email)->count()) {
-      return back()->with('notification', 'Email address has been already taken.');
-    }*/
-
     $field = $social_network . '_id';
     $user = User::where($field, $social_user->id)->first();
 
@@ -71,6 +65,7 @@ class LoginController extends Controller
       $user = User::create([
         'name' => $social_user->name,
         'email' => $social_user->email,
+        'image' => $social_user->avatar_original,
         'braintree_customer_id' => Customer::create([
           'firstName' => strtok($social_user->name, ' '),
           'lastName' => strstr($social_user->name, ' '),
@@ -80,16 +75,10 @@ class LoginController extends Controller
         'activated' => true
       ]);
 
-      $user->channel()->create([
-        'name' => $social_user->id,
-        'image' => $social_user->avatar_original,
-        'slug' => uniqid(true)
-      ]);
-
       $user->setting()->create();
     }
 
     auth()->login($user);
-    return redirect('home');
+    return redirect('dashboard');
   }
 }

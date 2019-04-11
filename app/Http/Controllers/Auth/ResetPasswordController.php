@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use LangleyFoxall\LaravelNISTPasswordRules\PasswordRules;
 
 class ResetPasswordController extends Controller
 {
@@ -22,11 +21,7 @@ class ResetPasswordController extends Controller
       return [
           'token' => 'required',
           'email' => 'required|email',
-          'password' => [
-            'required',
-            'min:8',
-            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/'
-          ]   
+          'password' => ['required', 'min:8', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/']   
       ];
   }
 }
