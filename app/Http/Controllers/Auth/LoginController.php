@@ -37,6 +37,10 @@ class LoginController extends Controller
     ]);
   }
 
+  protected function validateSocialLogin($email) {
+    $this->validate($request, ['email' => 'required|string|email|max:255|unique:users']);
+  }
+
   public function authenticated (Request $request, $user) {
     if (!$user->activated) {
       $this->activationService->sendActivationMail($user);
@@ -62,6 +66,12 @@ class LoginController extends Controller
     $user = User::where($field, $social_user->id)->first();
 
     if (!$user) {
+      $validator = $this->validateSocialLogin($social_user->email);
+
+      if ($validator->fails()) {
+        return redirect()->back()->withInput()->withErrors($validator);
+      }
+
       $user = User::create([
         'name' => $social_user->name,
         'email' => $social_user->email,

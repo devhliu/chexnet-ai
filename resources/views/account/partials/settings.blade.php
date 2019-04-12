@@ -41,7 +41,7 @@
           <label class="m-checkbox m-checkbox--solid m-checkbox--focus">
             <input type="hidden" name="profile_visibility" value="off" />
             <input type="checkbox" name="profile_visibility" {{ optional($user->setting)->profile_visibility === true ? 'checked' : '' }} />
-            Keep me updated on new features, articles, and tutorials.
+            Keep me up-to-date with new features, sales and other goodies.
             <span></span>
           </label>
           <label class="m-checkbox m-checkbox--solid m-checkbox--focus">

@@ -1,5 +1,7 @@
 -- Adminer 4.6.3 PostgreSQL dump
+
 CREATE SEQUENCE cards_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
+CREATE SEQUENCE diagnoses_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
 CREATE SEQUENCE failed_jobs_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE SEQUENCE jobs_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE SEQUENCE migrations_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 START 1 CACHE 1;
@@ -13,6 +15,7 @@ CREATE TABLE "public"."users" (
     "name" character varying(191) NOT NULL,
     "email" character varying(191) NOT NULL,
     "password" character varying(191),
+    "image" character varying(191) DEFAULT 'https://ucarecdn.com/b34e14f2-1f4a-43a9-8311-a12758bfe88f/' NOT NULL,
     "braintree_customer_id" character varying(191),
     "facebook_id" character varying(191),
     "google_id" character varying(191),
@@ -33,6 +36,31 @@ CREATE TABLE "public"."cards" (
     "updated_at" timestamp(0),
     CONSTRAINT "cards_pkey" PRIMARY KEY ("id"),
     CONSTRAINT "cards_user_id_foreign" FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT DEFERRABLE
+) WITH (oids = false);
+
+CREATE TABLE "public"."diagnoses" (
+    "id" integer DEFAULT nextval('diagnoses_id_seq') NOT NULL,
+    "user_id" integer NOT NULL,
+    "slug" character varying(191) NOT NULL,
+    "film" character varying(191) NOT NULL,
+    "film_url" character varying(191) DEFAULT 'https://ucarecdn.com/640e7ab5-e3c6-46e6-9b77-b803a9bc4ff1/' NOT NULL,
+    "atelectasis" double precision NOT NULL,
+    "cardiomegaly" double precision NOT NULL,
+    "effusion" double precision NOT NULL,
+    "infiltration" double precision NOT NULL,
+    "mass" double precision NOT NULL,
+    "nodule" double precision NOT NULL,
+    "pneumonia" double precision NOT NULL,
+    "consolidation" double precision NOT NULL,
+    "edema" double precision NOT NULL,
+    "emphysema" double precision NOT NULL,
+    "fibrosis" double precision NOT NULL,
+    "pleural_thickening" double precision NOT NULL,
+    "hernia" double precision NOT NULL,
+    "created_at" timestamp(0),
+    "updated_at" timestamp(0),
+    CONSTRAINT "diagnoses_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "diagnoses_user_id_foreign" FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT DEFERRABLE
 ) WITH (oids = false);
 
 CREATE TABLE "public"."failed_jobs" (
@@ -75,7 +103,8 @@ INSERT INTO "migrations" ("id", "migration", "batch") VALUES
 (7,	'2018_07_06_112710_create_plans_table',	1),
 (8,	'2018_07_07_091224_create_settings_table',	1),
 (9,	'2018_07_09_154928_create_plan_subscriptions_table',	1),
-(10,	'2018_07_10_001149_add_billable_columns_to_users_table',	1);
+(10,	'2018_07_10_001149_add_billable_columns_to_users_table',	1),
+(11,	'2019_04_09_203126_create_diagnoses_table',	1);
 
 CREATE TABLE "public"."password_resets" (
     "email" character varying(191) NOT NULL,
@@ -114,8 +143,8 @@ CREATE TABLE "public"."plans" (
 ) WITH (oids = false);
 
 INSERT INTO "plans" ("id", "name", "slug", "braintree_plan", "cost", "description", "created_at", "updated_at") VALUES
-(1,	'Premium Monthly Plan',	'premium-monthly-plan',	'premium-monthly',	9.99,	'Allows access to monthly premium videos adding several features to the basic CodeTube experience.',	'2019-03-29 14:05:23',	'2019-03-29 14:05:23'),
-(2,	'Premium Yearly Plan',	'premium-yearly-plan',	'premium-yearly',	69.99,	'Allows yearly access to premium features including prominent services like CodeTube ad-free.',	'2019-03-29 14:05:23',	'2019-03-29 14:05:23');
+(1,	'Premium Monthly Plan',	'premium-monthly-plan',	'premium-monthly',	9.99,	'Allows access to monthly premium videos adding several features to the basic CodeTube experience.',	'2019-04-12 06:20:59',	'2019-04-12 06:20:59'),
+(2,	'Premium Yearly Plan',	'premium-yearly-plan',	'premium-yearly',	69.99,	'Allows yearly access to premium features including prominent services like CodeTube ad-free.',	'2019-04-12 06:20:59',	'2019-04-12 06:20:59');
 
 CREATE TABLE "public"."settings" (
     "id" integer DEFAULT nextval('settings_id_seq') NOT NULL,
@@ -139,4 +168,4 @@ CREATE TABLE "public"."user_activations" (
 
 CREATE INDEX "user_activations_token_index" ON "public"."user_activations" USING btree ("token");
 
--- 2019-04-08 01:13:36.145023+01
+-- 2019-04-12 07:22:24.843784+01
