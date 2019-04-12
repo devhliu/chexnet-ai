@@ -60,6 +60,7 @@ class LoginController extends Controller
 
     $field = $social_network . '_id';
     $user = User::where($field, $social_user->id)->first();
+    dd($social_user);
 
     if (!$user) {
       // Enforce uniqueness invariant on email column
