@@ -63,7 +63,7 @@ class LoginController extends Controller
 
     // Enforce uniqueness invariant on email column
     if (User::where('email', $socialUser->getEmail())->count()) {
-      return redirect('login')->with('notification', 'Email address has been already taken.');
+      return redirect('login')->with('notification', 'Email address has already been taken.');
     }
 
     if (!$user) {
