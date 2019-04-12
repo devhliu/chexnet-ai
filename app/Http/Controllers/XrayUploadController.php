@@ -52,14 +52,15 @@ class XrayUploadController extends Controller
     $file->store();
     File::delete(public_path() . '/uploads/' . $request->xray);
     
-    $data = [];
-    foreach ($results->pathologies as $pathology => $diagnosis) {
-      $data[str_replace('-', '_', str_slug($pathology))] = $diagnosis->presence;
+    $diagnosis = [];
+    foreach ($results->pathologies as $pathology => $likelihood) {
+      $diagnosis[str_replace('-', '_', str_slug($pathology))] = $likelihood->presence;
     }
-    $data["slug"] = uniqid(true);
-    $data["film"] = $request->xray;
-    $data["film_url"] = $file->getUrl();
-    $request->user()->diagnoses()->create($data);
+    $diagnosis["slug"] = uniqid(true);
+    $diagnosis["film"] = $request->xray;
+    $diagnosis["film_url"] = $file->getUrl();
+    $request->user()->diagnoses()->create($diagnosis);
+
     $results->film = $request->xray;
     $results->film_url = $file->getUrl();
     return response()->json($results);

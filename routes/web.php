@@ -2,8 +2,8 @@
 
 Auth::routes();
 Route::get('user/activation/{token}', 'Auth\LoginController@activateUser')->name('user.activate');
-Route::get('/{social_network}/login', 'Auth\LoginController@redirect_to_provider');
-Route::get('/{social_network}/login/callback', 'Auth\LoginController@handle_provider_callback');
+Route::get('/{socialNetwork}/login', 'Auth\LoginController@redirectToProvider');
+Route::get('/{socialNetwork}/login/callback', 'Auth\LoginController@handleProviderCallback');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index');
 Route::post('/contact', 'ContactController@send');

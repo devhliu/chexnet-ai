@@ -36,10 +36,9 @@ class ImageUploadController extends Controller
       $file->store();
       File::delete(public_path() . '/uploads/' . $filename);
 
-      $img_url = $file->getUrl();
-      $request->user()->image = $img_url;
+      $request->user()->image = $file->getUrl();
       $request->user()->save();
-      return response()->json(['url' => $img_url, 'status' => 'Profile image updated.'], 200);
+      return response()->json(['url' => $file->getUrl(), 'status' => 'Profile image updated.'], 200);
     }
 
     $handler = $saver->handler();

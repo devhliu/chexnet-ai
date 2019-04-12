@@ -46,37 +46,37 @@ class LoginController extends Controller
     return redirect()->intended($this->redirectPath());
   }
 
-  public function redirect_to_provider ($social_network) {
-    return Socialite::driver($social_network)->redirect();
+  public function redirectToProvider ($socialNetwork) {
+    return Socialite::driver($socialNetwork)->redirect();
   }
 
-  public function handle_provider_callback ($social_network) {
+  public function handleProviderCallback ($socialNetwork) {
     try {
-      $social_user = Socialite::driver($social_network)->user();
+      $socialUser = Socialite::driver($socialNetwork)->user();
     }
     catch (\Exception $e ) {
-      return redirect('/');
+      return back()->with('notification', $e->getMesage());
     }
 
-    $field = $social_network . '_id';
-    $user = User::where($field, $social_user->id)->first();
+    $field = $socialNetwork . '_id';
+    $user = User::where($field, $socialUser->getId())->first();
 
     // Enforce uniqueness invariant on email column
-    if (User::where('email', $social_user->email)->count()) {
-      return back()->with('notification', 'Email address has been already taken.');
-    }
+    /* if (User::where('email', $socialUser->getEmail())->count()) { */
+    /*   return back()->with('notification', 'Email address has been already taken.'); */
+    /* } */
 
     if (!$user) {
       $user = User::create([
-        'name' => $social_user->getName(),
-        'email' => $social_user->getEmail(),
-        'image' => $social_user->getAvatar(),
+        'name' => $socialUser->getName(),
+        'email' => $socialUser->getEmail(),
+        'image' => $socialUser->getAvatar(),
         'braintree_customer_id' => Customer::create([
-          'firstName' => strtok($social_user->getName(), ' '),
-          'lastName' => strstr($social_user->getName(), ' '),
-          'email' => $social_user->getEmail()
+          'firstName' => strtok($socialUser->getName(), ' '),
+          'lastName' => strstr($socialUser->getName(), ' '),
+          'email' => $socialUser->getEmail()
         ])->customer->id,
-        $field => $social_user->getId(),
+        $field => $socialUser->getId(),
         'activated' => true
       ]);
 
