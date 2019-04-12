@@ -55,7 +55,7 @@ class LoginController extends Controller
       $socialUser = Socialite::driver($socialNetwork)->user();
     }
     catch (\Exception $e ) {
-      return back()->with('notification', $e->getMesage());
+      return back()->with('notification', $e->getMessage());
     }
 
     $field = $socialNetwork . '_id';
