@@ -21,7 +21,8 @@
         "spatie/laravel-fractal": "^5.3",
         "swiftmailer/swiftmailer": "6.0.*",
         "symfony/process": "3.4.x-dev",
-        "uploadcare/uploadcare-php": "^2.2"
+        "uploadcare/uploadcare-php": "^2.2",
+        "ext-gd": "*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
