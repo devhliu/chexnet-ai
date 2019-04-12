@@ -59,12 +59,7 @@ class LoginController extends Controller
     }
 
     $field = $socialNetwork . '_id';
-    $user = User::where($field, $socialUser->getId())->first();
-
-    // Enforce uniqueness invariant on email column
-    if (User::where('email', $socialUser->getEmail())->count()) {
-      return redirect('login')->with('notification', 'Email address has already been taken.');
-    }
+    $user = User::where($field, $socialUser->getId())->orWhere('email', $socialUser->getEmail())->first();
 
     if (!$user) {
       $user = User::create([
@@ -81,6 +76,10 @@ class LoginController extends Controller
       ]);
 
       $user->setting()->create();
+    }
+
+    if ($user->$field != $socialUser->getId() && $user->email == $socialUser->getEmail()) {
+      return back()->with('notification', 'Email address has already been taken.');
     }
 
     auth()->login($user);
