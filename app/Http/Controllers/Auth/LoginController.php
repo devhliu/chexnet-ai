@@ -72,8 +72,8 @@ class LoginController extends Controller
         'email' => $social_user->getEmail(),
         'image' => $social_user->getAvatar(),
         'braintree_customer_id' => Customer::create([
-          'firstName' => strtok($social_user->name, ' '),
-          'lastName' => strstr($social_user->name, ' '),
+          'firstName' => strtok($social_user->getName(), ' '),
+          'lastName' => strstr($social_user->getName(), ' '),
           'email' => $social_user->getEmail()
         ])->customer->id,
         $field => $social_user->getId(),
