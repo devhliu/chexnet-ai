@@ -79,7 +79,7 @@ class LoginController extends Controller
     }
 
     if ($user->$field != $socialUser->getId() && $user->email == $socialUser->getEmail()) {
-      return back()->with('notification', 'Email address has already been taken.');
+      return redirect('login')->with('notification', 'Email address has already been taken.');
     }
 
     auth()->login($user);
