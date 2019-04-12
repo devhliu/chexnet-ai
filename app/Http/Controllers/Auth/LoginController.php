@@ -8,7 +8,6 @@ use Braintree\Customer;
 use Illuminate\Http\Request;
 use App\Services\ActivationService;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -38,10 +37,6 @@ class LoginController extends Controller
     ]);
   }
 
-  protected function validateSocialLogin($email) {
-    return Validator::make($email, ['email' => 'required|string|email|max:255|unique:users']);
-  }
-
   public function authenticated (Request $request, $user) {
     if (!$user->activated) {
       $this->activationService->sendActivationMail($user);
@@ -67,10 +62,9 @@ class LoginController extends Controller
     $user = User::where($field, $social_user->id)->first();
 
     if (!$user) {
-      $validator = $this->validateSocialLogin($social_user->email);
-
-      if ($validator->fails()) {
-        return redirect()->back()->withInput()->withErrors($validator);
+      // Enforce uniqueness invariant on email column
+      if (User::where('email', $social_user->email)->count()) {
+        return back()->with('notification', 'Email address has been already taken.');
       }
 
       $user = User::create([
