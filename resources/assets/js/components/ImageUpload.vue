@@ -139,7 +139,7 @@ export default {
                 $(this).attr("src", response.url);
             });
             this.$refs.dropzoneImage.removeAllFiles(true);
-            this.notify("Profile Updated.", "success");
+            this.notify("Profile image updated.", "success");
             this.uploading = false;
             this.uploaded = true;
             $("#upload-image-modal").modal("toggle");
