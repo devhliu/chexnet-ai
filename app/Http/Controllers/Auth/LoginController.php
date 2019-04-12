@@ -38,7 +38,7 @@ class LoginController extends Controller
   }
 
   protected function validateSocialLogin($email) {
-    $this->validate($email, ['email' => 'required|string|email|max:255|unique:users']);
+    return Validator::make($email, ['email' => 'required|string|email|max:255|unique:users']);
   }
 
   public function authenticated (Request $request, $user) {
