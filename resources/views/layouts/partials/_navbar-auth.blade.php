@@ -78,7 +78,7 @@
 
                     <li class="m-nav__item">
                       <a href="#" 
-                        class="btn btn-outline-danger m-btn m-btn--wide btn-sm" 
+                        class="btn btn-danger m-btn m-btn--wide btn-sm" 
                         onclick="event.preventDefault(); document.getElementById('sign-out-form').submit();"
                       >
                         Sign out
