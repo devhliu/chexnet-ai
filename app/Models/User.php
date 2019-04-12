@@ -18,6 +18,7 @@ class User extends Authenticatable
     'name', 
     'email', 
     'password',
+    'iamge',
     'braintree_customer_id',
     'facebook_id',
     'google_id',

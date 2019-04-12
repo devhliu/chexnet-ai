@@ -60,7 +60,6 @@ class LoginController extends Controller
 
     $field = $social_network . '_id';
     $user = User::where($field, $social_user->id)->first();
-    dd($social_user);
 
     if (!$user) {
       // Enforce uniqueness invariant on email column
@@ -69,15 +68,15 @@ class LoginController extends Controller
       }
 
       $user = User::create([
-        'name' => $social_user->name,
-        'email' => $social_user->email,
-        'image' => $social_user->avatar_original,
+        'name' => $social_user->getName(),
+        'email' => $social_user->getEmail(),
+        'image' => $social_user->getAvatar(),
         'braintree_customer_id' => Customer::create([
           'firstName' => strtok($social_user->name, ' '),
           'lastName' => strstr($social_user->name, ' '),
-          'email' => $social_user->email
+          'email' => $social_user->getEmail()
         ])->customer->id,
-        $field => $social_user->id,
+        $field => $social_user->getId(),
         'activated' => true
       ]);
 
